@@ -99,7 +99,6 @@ export default function BoardLayout({
 
   clearReviewReport
 }) {
-  const shouldShowAnalysisPanel = settings.showAnalysisPanel !== false;
 
   return (
     <div className={`app-shell ${sidebarOpen ? "" : "sidebar-hidden"}`}>
@@ -188,7 +187,6 @@ export default function BoardLayout({
         analyzeCurrentPosition={analyzeCurrentPosition}
         reviewCurrentMove={reviewCurrentMove}
       />
-
 
       <ModalLayer
         showTeachingReview={showTeachingReview}
