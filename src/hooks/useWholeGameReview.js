@@ -170,7 +170,7 @@ export default function useWholeGameReview({
         const moveNumber = state.moves.length;
 
         setReviewProgress({
-          current: i,
+          current: i - 1,
           total: totalMoves
         });
 
@@ -214,7 +214,7 @@ export default function useWholeGameReview({
 
         analyzedMoves.push(analyzedMove);
         setReviewProgress({
-          current: Math.min(i + 1, totalMoves),
+          current: i,
           total: totalMoves
         });
 
