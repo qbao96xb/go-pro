@@ -1,13 +1,16 @@
 # dependencies
 /node_modules
+frontend/node_modules/
 /.pnp
 .pnp.js
 
 # testing
 /coverage
+frontend/coverage/
 
 # production
 /build
+frontend/build/
 
 # environment variables and secrets
 .env
@@ -20,6 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 *.log
 analysis_logs/
+backend/analysis_logs/
 
 # Python
 __pycache__/
@@ -31,6 +35,7 @@ __pycache__/
 venv/
 env/
 ENV/
+backend/go-pro/
 pip-log.txt
 pip-delete-this-directory.txt
 
@@ -46,6 +51,8 @@ pip-delete-this-directory.txt
 *.cfg.local
 katago/
 models/
+backend/katago/
+backend/models/
 
 # OS files
 .DS_Store
