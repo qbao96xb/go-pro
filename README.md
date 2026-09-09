@@ -377,28 +377,6 @@ http://localhost:8000/health
 
 ---
 
-## Development Notes
-
-- Do not commit `node_modules/` to GitHub.
-- Use `.gitignore` to exclude generated files and local dependencies.
-- KataGo model files can be large and should usually not be committed.
-- Local machine-specific paths should be replaced with environment variables before deployment.
-
-Recommended `.gitignore` entries:
-
-```gitignore
-node_modules/
-.env
-__pycache__/
-*.pyc
-analysis_logs/
-*.log
-*.bin.gz
-.DS_Store
-```
-
----
-
 ## Purpose
 
 This project is built as a Go learning and analysis tool. It combines interactive gameplay with KataGo-powered review features, allowing players to study their games, test alternative moves, and improve their understanding of Go strategy.
