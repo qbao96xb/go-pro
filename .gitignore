@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -11,13 +9,53 @@
 # production
 /build
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# environment variables and secrets
+.env
+.env.*
+!.env.example
 
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+analysis_logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# FastAPI / local backend
+*.db
+*.sqlite
+*.sqlite3
+
+# KataGo models and configs
+*.bin.gz
+*.txt.gz
+*.model
+*.cfg.local
+katago/
+models/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+
+# temporary files
+*.tmp
+*.temp
+.cache/

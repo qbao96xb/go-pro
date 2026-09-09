@@ -1,70 +1,404 @@
-# Getting Started with Create React App
+# Go Teaching and Playing App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web-based Go application for playing, reviewing, and studying Go games with AI-powered analysis from the KataGo engine.
 
-## Available Scripts
+This project provides an interactive Go board, game navigation, review mode, teaching mode, and position analysis. It is designed to help players understand their moves, compare alternatives, and improve through AI feedback.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Interactive 19x19 Go board
+- Human move input
+- Bot/AI-assisted play
+- Move history and navigation
+- Review mode for analyzing completed games
+- Teaching mode for guided learning
+- KataGo-powered position analysis
+- Best move suggestions
+- Winrate and evaluation tracking
+- Ownership/territory visualization
+- Whole-game review
+- Branch and variation exploration
+- Auto-save support for completed games
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## Technology Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Frontend
 
-### `npm run build`
+- React
+- JavaScript
+- CSS
+- Custom React hooks for board logic, navigation, analysis, and game state management
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Python
+- FastAPI
+- KataGo analysis engine
+- Subprocess-based communication with KataGo
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```text
+go-pro/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── utils/
+│   │   ├── Board.js
+│   │   ├── App.js
+│   │   └── index.js
+│   ├── package.json
+│   └── README.md
+│
+├── backend/
+│   ├── main.py
+│   └── katago_wrapper.py
+│
+└── analysis_logs/
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Main Application Logic
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The main board logic is implemented in:
 
-## Learn More
+```text
+frontend/src/Board.js
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+`Board.js` acts as the central controller of the application. It connects the game state, board rendering, move handling, KataGo analysis, review system, and user interface.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## What `Board.js` Does
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 1. App Modes
 
-### Analyzing the Bundle Size
+The app supports multiple modes:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Play mode** - normal gameplay
+- **Review mode** - analyze a game after or during play
+- **Teaching mode** - guided review and learning mode
 
-### Making a Progressive Web App
+The current mode is controlled by:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```javascript
+const [appMode, setAppMode] = useState("play");
+```
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 2. Game State Management
 
-### Deployment
+The app tracks:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Board position
+- Move history
+- Current move index
+- Game-over state
+- Current player state
+- Sign map for board rendering
 
-### `npm run build` fails to minify
+This is handled mainly through the custom hook:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```javascript
+useLinearGame()
+```
+
+---
+
+### 3. KataGo Analysis
+
+The app uses KataGo to analyze Go positions and provide AI feedback.
+
+KataGo analysis supports:
+
+- Best move suggestions
+- Winrate evaluation
+- Ownership/territory estimation
+- Evaluation history
+- Current-position analysis
+- Whole-game review
+
+This is handled through:
+
+```javascript
+useKataGoAnalysis()
+```
+
+and backend endpoints such as:
+
+```text
+POST /analyze
+```
+
+---
+
+### 4. Whole-Game Review
+
+The app can review an entire game and identify important moments.
+
+This is handled through:
+
+```javascript
+useWholeGameReview()
+```
+
+The review system can analyze the sequence of moves and generate a report for teaching or self-study.
+
+---
+
+### 5. Review Tree and Variations
+
+The app supports branching variations during review.
+
+This allows users to:
+
+- Explore alternative moves
+- Compare KataGo suggestions
+- Study different continuations
+- Navigate through review branches
+
+This is handled through:
+
+```javascript
+useReviewTree()
+```
+
+---
+
+### 6. Move Handling
+
+Player moves and bot moves are handled by:
+
+```javascript
+useMoveHandlers()
+```
+
+This controls:
+
+- Human board clicks
+- Legal move placement
+- Bot responses
+- Updating board state
+- Triggering analysis after moves
+
+---
+
+### 7. Board Rendering
+
+The Go board is rendered using:
+
+```javascript
+useBoardRenderer()
+```
+
+This hook draws the current board state and connects board clicks to move handling.
+
+---
+
+### 8. Game Actions
+
+The app supports common game actions such as:
+
+- Start new game
+- Save game
+- Save game as
+- Load game
+- Pass
+- Resign
+
+These are handled by:
+
+```javascript
+useBoardActions()
+```
+
+---
+
+### 9. Navigation
+
+Users can move backward and forward through the game history.
+
+Navigation is handled by:
+
+```javascript
+useBoardNavigation()
+```
+
+Supported navigation includes:
+
+- Go to previous move
+- Go to next move
+- Jump to a specific move number
+- Navigate through review-tree variations
+
+---
+
+### 10. Auto-Saving Finished Games
+
+When a game is completed, the app can automatically save the finished game.
+
+This logic is implemented in:
+
+```javascript
+useAutoSaveFinishedGame()
+```
+
+---
+
+## Backend and KataGo Integration
+
+The backend is implemented with FastAPI.
+
+Main backend files:
+
+```text
+backend/main.py
+backend/katago_wrapper.py
+```
+
+### `main.py`
+
+Defines the FastAPI server and the `/analyze` endpoint.
+
+The endpoint receives a Go position and sends it to KataGo for analysis.
+
+### `katago_wrapper.py`
+
+Manages communication with the KataGo process.
+
+It:
+
+- Starts KataGo in analysis mode
+- Sends JSON requests to KataGo
+- Reads KataGo responses
+- Handles timeouts
+- Returns analysis results to the frontend
+
+---
+
+## KataGo Requirements
+
+To use the AI analysis features, KataGo must be installed locally.
+
+You also need:
+
+- KataGo executable
+- KataGo config file
+- KataGo model file
+
+Example backend paths can be configured in `main.py` or through environment variables:
+
+```text
+KATAGO_PATH
+KATAGO_CONFIG
+KATAGO_MODEL
+```
+
+Example:
+
+```bash
+export KATAGO_PATH="/opt/homebrew/bin/katago"
+export KATAGO_CONFIG="/path/to/analysis_example.cfg"
+export KATAGO_MODEL="/path/to/katago-model.bin.gz"
+```
+
+---
+
+## Running the Frontend
+
+Go to the frontend folder:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the React app:
+
+```bash
+npm start
+```
+
+The app will usually run at:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## Running the Backend
+
+Go to the backend folder:
+
+```bash
+cd backend
+```
+
+Install Python dependencies:
+
+```bash
+pip install fastapi uvicorn pydantic
+```
+
+Start the backend server:
+
+```bash
+uvicorn main:app --reload
+```
+
+The backend will usually run at:
+
+```text
+http://localhost:8000
+```
+
+You can test the backend health endpoint:
+
+```text
+http://localhost:8000/health
+```
+
+---
+
+## Development Notes
+
+- Do not commit `node_modules/` to GitHub.
+- Use `.gitignore` to exclude generated files and local dependencies.
+- KataGo model files can be large and should usually not be committed.
+- Local machine-specific paths should be replaced with environment variables before deployment.
+
+Recommended `.gitignore` entries:
+
+```gitignore
+node_modules/
+.env
+__pycache__/
+*.pyc
+analysis_logs/
+*.log
+*.bin.gz
+.DS_Store
+```
+
+---
+
+## Purpose
+
+This project is built as a Go learning and analysis tool. It combines interactive gameplay with KataGo-powered review features, allowing players to study their games, test alternative moves, and improve their understanding of Go strategy.
