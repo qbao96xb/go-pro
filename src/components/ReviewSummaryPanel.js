@@ -77,7 +77,7 @@ export default function ReviewSummaryPanel({
               return (
                 <button
                   key={move.moveNumber}
-                  className={`pivotal-move-item pivotal-${move.level} ${selected ? "selected" : ""}`}
+                  className={`pivotal-move-item pivotal-${move.severity || "minor"} ${selected ? "selected" : ""}`}
                   onClick={() => onAnalyzePivotalMove(move)}
                 >
                   <span>
@@ -86,7 +86,10 @@ export default function ReviewSummaryPanel({
                   </span>
 
                   <strong>
-                    Swing {move.scoreSwing.toFixed(1)}
+                    Loss{" "}
+                    {typeof move.pointLoss === "number"
+                      ? move.pointLoss.toFixed(1)
+                      : "-"}
                   </strong>
                 </button>
               );

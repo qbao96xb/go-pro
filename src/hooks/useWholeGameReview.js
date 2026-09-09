@@ -144,24 +144,35 @@ export default function useWholeGameReview({
   analyzePosition
 }) {
   const [reviewRunning, setReviewRunning] = useState(false);
-  const [reviewProgress, setReviewProgress] = useState(0);
+  const [reviewProgress, setReviewProgress] = useState({
+    current: 0,
+    total: 0
+  });
   const [reviewReport, setReviewReport] = useState(null);
 
   const runWholeGameReview = useCallback(async () => {
     if (reviewRunning || !history || history.length <= 1) return;
 
+    const totalMoves = Math.max(0, history.length - 1);
+
     setReviewRunning(true);
-    setReviewProgress(0);
+    setReviewProgress({
+      current: 0,
+      total: totalMoves
+    });
 
     const analyzedMoves = [];
     const pivotalMoves = [];
 
     try {
-      for (let i = 0; i < history.length; i += 1) {
+      for (let i = 1; i < history.length; i += 1) {
         const state = history[i];
         const moveNumber = state.moves.length;
 
-        setReviewProgress(Math.round((i / Math.max(1, history.length - 1)) * 100));
+        setReviewProgress({
+          current: i,
+          total: totalMoves
+        });
 
         const result = await analyzePosition(state.moves, true);
 
@@ -202,6 +213,10 @@ export default function useWholeGameReview({
         };
 
         analyzedMoves.push(analyzedMove);
+        setReviewProgress({
+          current: Math.min(i + 1, totalMoves),
+          total: totalMoves
+        });
 
         if (
           moveNumber > 0 &&
@@ -237,7 +252,10 @@ export default function useWholeGameReview({
         recommendations: buildRecommendations(reportBase)
       });
 
-      setReviewProgress(100);
+      setReviewProgress({
+        current: totalMoves,
+        total: totalMoves
+      });
     } catch (err) {
       console.error("Whole game review failed:", err);
       alert("Whole-game review failed. Please check KataGo/backend connection.");
@@ -252,7 +270,10 @@ export default function useWholeGameReview({
 
   const clearReviewReport = useCallback(() => {
     setReviewReport(null);
-    setReviewProgress(0);
+    setReviewProgress({
+      current: 0,
+      total: 0
+    });
   }, []);
 
   return {
