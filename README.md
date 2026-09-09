@@ -376,6 +376,15 @@ http://localhost:8000/health
 ```
 
 ---
+## KataGo Setup
+
+This project requires a local KataGo installation for AI analysis.
+
+See the full setup guide here:
+
+[KataGo Setup Guide](KATAGO_SETUP.md)
+
+---
 
 ## Purpose
 

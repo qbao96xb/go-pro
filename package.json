@@ -20,7 +20,7 @@
   "scripts": {
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "frontend": "react-scripts start",
-    "backend": "cd ../backend && uvicorn main:app --reload",
+    "backend": "cd ../backend && ./go-pro/bin/python -m uvicorn main:app --reload",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
